@@ -4,6 +4,9 @@
 #include "../Game_local.h"
 #include "../Weapon.h"
 
+#include "../spawner.h"
+
+
 #define BLASTER_SPARM_CHARGEGLOW		6
 
 class rvWeaponBlaster : public rvWeapon {
@@ -398,6 +401,12 @@ rvWeaponBlaster::State_Fire
 ================
 */
 stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
+	const char* key, * value;
+	int			i;
+	float		yaw;
+	idVec3		org;
+	idPlayer* player;
+	idDict		dict;
 	enum {
 		FIRE_INIT,
 		FIRE_WAIT,
@@ -427,13 +436,22 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 
 	
 			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
-				Attack ( true, 1, spread, 0, 1.0f );
-				PlayEffect ( "fx_chargedflash", barrelJointView, false );
-				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
-			} else {
-				Attack ( false, 10, 10, 0, 0.5f );
+				Attack ( false, 1, 1, 0, 0.5f );
 				PlayEffect ( "fx_normalflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
+
+				/*
+				Added Stuff Below
+				*/
+				player = gameLocal.GetLocalPlayer();
+				yaw = player->viewAngles.yaw;
+				dict.Set("classname", "monster_strogg_marine");
+				dict.Set("angle", va("%f", yaw + 180));
+				org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+				dict.Set("origin", org.ToString());
+				idEntity* newEnt = NULL;
+				gameLocal.SpawnEntityDef(dict, &newEnt);
+				
 			}
 			fireHeldTime = 0;
 			

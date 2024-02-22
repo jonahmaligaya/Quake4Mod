@@ -286,6 +286,16 @@ public:
 
 	class idPlayerView		playerView;			// handles damage kicks and effects
 
+	/*
+	My declarations
+	*/
+
+	idEntity*				quakepal;
+
+	/*
+	My declarations
+	*/
+
 	bool					alreadyDidTeamAnnouncerSound;
 	bool					noclip;
 	bool					godmode;
@@ -477,6 +487,13 @@ public:
 
 							// delta view angles to allow movers to rotate the view of the player
 	void					UpdateDeltaViewAngles( const idAngles &angles );
+
+	/*
+	My declarations
+	*/
+	/*
+	My declarations
+	*/
 
 	virtual bool			Collide( const trace_t &collision, const idVec3 &velocity );
 

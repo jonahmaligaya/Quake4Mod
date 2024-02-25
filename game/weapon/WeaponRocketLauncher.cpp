@@ -439,6 +439,13 @@ rvWeaponRocketLauncher::State_Fire
 ================
 */
 stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
+	const char* key, * value;
+	int			i;
+	float		yaw;
+	idVec3		org;
+	idPlayer* player;
+	idDict		dict;
+	idEntity* newEnt = NULL;
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -446,10 +453,18 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));		
-			Attack ( false, 10, spread, 0, 0.75f );
-			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );	
+			Attack ( false, 0, 0, 0, 0.0f );
+			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );
+			player = gameLocal.GetLocalPlayer();
+			yaw = player->viewAngles.yaw;
+			dict.Set("classname", "monster_strogg_marine");
+			dict.Set("angle", va("%f", yaw));
+			org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+			dict.Set("origin", org.ToString());
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			player->fl.notarget = true;
 			return SRESULT_STAGE ( STAGE_WAIT );
-	
+
 		case STAGE_WAIT:			
 			if ( wsfl.attack && gameLocal.time >= nextAttackTime && ( gameLocal.isClient || AmmoInClip ( ) ) && !wsfl.lowerWeapon ) {
 				SetState ( "Fire", 0 );

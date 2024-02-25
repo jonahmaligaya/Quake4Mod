@@ -433,24 +433,11 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 				return SRESULT_DONE;
 			}
 
-
-	
+			//Fire an attack.
 			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
-				Attack ( false, 1, 1, 0, 0.5f );
+				Attack ( false, 1, 1, 0, 1.0f );
 				PlayEffect ( "fx_normalflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
-
-				/*
-				Added Stuff Below
-				*/
-				player = gameLocal.GetLocalPlayer();
-				yaw = player->viewAngles.yaw;
-				dict.Set("classname", "monster_strogg_marine");
-				dict.Set("angle", va("%f", yaw + 180));
-				org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
-				dict.Set("origin", org.ToString());
-				idEntity* newEnt = NULL;
-				gameLocal.SpawnEntityDef(dict, &newEnt);
 				
 			}
 			fireHeldTime = 0;

@@ -4,6 +4,9 @@
 #include "../Game_local.h"
 #include "../Weapon.h"
 
+#include "../spawner.h"
+
+
 #define BLASTER_SPARM_CHARGEGLOW		6
 
 class rvWeaponBlaster : public rvWeapon {
@@ -398,6 +401,12 @@ rvWeaponBlaster::State_Fire
 ================
 */
 stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
+	const char* key, * value;
+	int			i;
+	float		yaw;
+	idVec3		org;
+	idPlayer* player;
+	idDict		dict;
 	enum {
 		FIRE_INIT,
 		FIRE_WAIT,
@@ -424,16 +433,12 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 				return SRESULT_DONE;
 			}
 
-
-	
+			//Fire an attack.
 			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
-				Attack ( true, 1, spread, 0, 1.0f );
-				PlayEffect ( "fx_chargedflash", barrelJointView, false );
-				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
-			} else {
-				Attack ( false, 1, spread, 0, 1.0f );
+				Attack ( false, 1, 1, 0, 1.0f );
 				PlayEffect ( "fx_normalflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
+				
 			}
 			fireHeldTime = 0;
 			

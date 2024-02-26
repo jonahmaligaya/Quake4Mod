@@ -305,6 +305,13 @@ rvWeaponDarkMatterGun::State_Fire
 ================
 */
 stateResult_t rvWeaponDarkMatterGun::State_Fire ( const stateParms_t& parms ) {
+	const char* key, * value;
+	int			i;
+	float		yaw;
+	idVec3		org;
+	idPlayer* player;
+	idDict		dict;
+	idEntity* newEnt = NULL;
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -315,7 +322,15 @@ stateResult_t rvWeaponDarkMatterGun::State_Fire ( const stateParms_t& parms ) {
 
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 			Attack ( false, 0, 0, 0, 0.0f );
-			PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );	
+			PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );
+			player = gameLocal.GetLocalPlayer();
+			yaw = player->viewAngles.yaw;
+			dict.Set("classname", "monster_grunt");
+			dict.Set("angle", va("%f", yaw));
+			org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+			dict.Set("origin", org.ToString());
+			gameLocal.SpawnEntityDef(dict, &newEnt);
+			player->fl.notarget = true;
 			return SRESULT_STAGE ( STAGE_WAIT );
 	
 		case STAGE_WAIT:		

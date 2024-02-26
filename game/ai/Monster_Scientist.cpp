@@ -49,9 +49,12 @@ rvMonsterScientist::OnDeath
 ================
 */
 void rvMonsterScientist::OnDeath ( void ) {
+	idPlayer* player;
 	StopEffect ( "fx_fly" );
 	
 	idAI::OnDeath ( );
+	player = gameLocal.GetLocalPlayer();
+	player->GiveItem("weapon_grenadelauncher");
 }
 
 /*

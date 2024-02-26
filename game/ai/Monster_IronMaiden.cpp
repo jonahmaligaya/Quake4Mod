@@ -283,11 +283,15 @@ rvMonsterIronMaiden::OnDeath
 ================
 */
 void rvMonsterIronMaiden::OnDeath ( void ) {
+	idPlayer* player;
 	StopSound ( SND_CHANNEL_ITEM, false );
 
 	// Stop looping effects
 	StopEffect ( "fx_banshee" );
 	StopEffect ( "fx_dress" );
+
+	player = gameLocal.GetLocalPlayer();
+	player->GiveItem("weapon_railgun");
 	
 	idAI::OnDeath( );
 }

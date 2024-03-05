@@ -227,7 +227,7 @@ stateResult_t rvWeaponRailgun::State_Fire ( const stateParms_t& parms ) {
 
 					}
 					else if (strcmp(check->GetEntityDefName(), "monster_stream_protector") == 0) {
-						checkAI->SetState("Torso_LightningAttack");
+						checkAI->SetState("Torso_BlasterAttack");
 
 					}
 					else if (strcmp(check->GetEntityDefName(), "monster_sentry") == 0) {

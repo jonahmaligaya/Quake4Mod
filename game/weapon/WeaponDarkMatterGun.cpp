@@ -359,7 +359,7 @@ stateResult_t rvWeaponDarkMatterGun::State_Fire ( const stateParms_t& parms ) {
 
 					}
 					else if (strcmp(check->GetEntityDefName(), "monster_stream_protector") == 0) {
-						checkAI->SetState("Torso_BlasterAttack");
+						checkAI->SetState("Torso_LightningAttack");
 
 					}
 					else if (strcmp(check->GetEntityDefName(), "monster_sentry") == 0) {

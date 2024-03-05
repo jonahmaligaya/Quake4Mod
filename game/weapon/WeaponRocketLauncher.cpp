@@ -9,6 +9,11 @@
 #include "../Projectile.h"
 #endif
 
+#include "../ai/AI.h"
+#include "../spawner.h"
+
+#include <string.h>
+
 class rvWeaponRocketLauncher : public rvWeapon {
 public:
 
@@ -439,13 +444,18 @@ rvWeaponRocketLauncher::State_Fire
 ================
 */
 stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
-	const char* key, * value;
+	int			e;
 	int			i;
-	float		yaw;
-	idVec3		org;
-	idPlayer* player;
-	idDict		dict;
-	idEntity* newEnt = NULL;
+	idEntity*	check;
+	int			count;
+	idDict		countsFixed;
+	idDict		countsSpawned;
+	idPlayer*	player;
+	player = gameLocal.GetLocalPlayer();
+	count = 0;
+	
+
+	
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -455,14 +465,35 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));		
 			Attack ( false, 0, 0, 0, 0.0f );
 			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );
-			player = gameLocal.GetLocalPlayer();
-			yaw = player->viewAngles.yaw;
-			dict.Set("classname", "monster_strogg_marine");
-			dict.Set("angle", va("%f", yaw));
-			org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
-			dict.Set("origin", org.ToString());
-			gameLocal.SpawnEntityDef(dict, &newEnt);
-			player->fl.notarget = true;
+			for (e = 0; e < MAX_GENTITIES; e++) {
+				check = gameLocal.entities[e];
+				if (!check) {
+					continue;
+				}
+				
+				if (check->IsType(idAI::GetClassType())) {
+					idAI* checkAI = static_cast<idAI*>(check);
+					if (checkAI->spawner) {
+						continue;
+					}
+					if (strcmp(check->GetEntityDefName(), "monster_gladiator") == 0) {
+						checkAI->SetState("Torso_RailgunAttack");
+
+					} else if (strcmp(check->GetEntityDefName(), "monster_lt_tank") == 0) {
+						checkAI->SetState("Torso_FlameThrower");
+
+					} else if (strcmp(check->GetEntityDefName(), "monster_iron_maiden") == 0) {
+						checkAI->SetState("Torso_BansheeAttack");
+
+					} else if (strcmp(check->GetEntityDefName(), "monster_stream_protector") == 0) {
+						checkAI->SetState("Torso_PlasmaAttack");
+
+					} else if (strcmp(check->GetEntityDefName(), "monster_sentry") == 0) {
+						checkAI->SetState("State_Action_CircleStrafe");
+
+					}
+				}
+			}
 			return SRESULT_STAGE ( STAGE_WAIT );
 
 		case STAGE_WAIT:			

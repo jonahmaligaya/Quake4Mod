@@ -291,8 +291,11 @@ void rvMonsterIronMaiden::OnDeath ( void ) {
 	StopEffect ( "fx_dress" );
 
 	player = gameLocal.GetLocalPlayer();
+	player->GiveItem("weapon_hyperblaster");
+	player->GiveItem("weapon_rocketlauncher");
 	player->GiveItem("weapon_railgun");
-	
+	player->GiveItem("weapon_dmg");
+
 	idAI::OnDeath( );
 }
 

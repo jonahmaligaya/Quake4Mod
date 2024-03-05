@@ -272,6 +272,12 @@ stateResult_t rvMonsterStreamProtector::State_Killed ( const stateParms_t& parms
 	DisableAnimState ( ANIMCHANNEL_LEGS );
 	PlayAnim ( ANIMCHANNEL_TORSO, "death", parms.blendFrames );
 	PostState ( "State_Dead" );
+	idPlayer* player;
+	player = gameLocal.GetLocalPlayer();
+	player->GiveItem("weapon_grenadelauncher");
+	player->GiveItem("weapon_rocketlauncher");
+	player->GiveItem("weapon_railgun");
+	player->GiveItem("weapon_dmg");
 	return SRESULT_DONE;	
 }
 

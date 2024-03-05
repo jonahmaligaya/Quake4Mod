@@ -4,6 +4,8 @@
 
 #include "../Game_local.h"
 
+#include "../ai/AI.h"
+
 
 //NOTE: actually a bit of a misnomer, as all Strogg Marine types use this class now...
 class rvMonsterStroggMarine : public idAI {
@@ -89,7 +91,6 @@ void rvMonsterStroggMarine::Killed( idEntity* inflictor, idEntity* attacker, int
 	const char* modelDeath;
 	const idKeyValue* kv;
 	/*added stuff here*/
-	idPlayer* player;
 
 	if (g_debugDamage.GetBool()) {
 		gameLocal.Printf("Damage: joint: '%s', zone '%s'\n", animator.GetJointName((jointHandle_t)location),
@@ -103,8 +104,6 @@ void rvMonsterStroggMarine::Killed( idEntity* inflictor, idEntity* attacker, int
 	}
 
 	aifl.dead = true;
-	player = gameLocal.GetLocalPlayer();
-	player->GiveItem("weapon_rocketlauncher");
 
 	// turn off my flashlight, if I had one
 	ProcessEvent(&AI_Flashlight, false);
@@ -335,6 +334,8 @@ void rvMonsterStroggMarine::OnStopMoving ( aiMoveCommand_t oldMoveCommand ) {
 			actionSprayAttack.timer.Clear( actionTime );
 		}
 	}
+	//add if stuff here
+
 }
 
 /*

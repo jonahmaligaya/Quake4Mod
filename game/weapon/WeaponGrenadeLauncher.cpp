@@ -156,7 +156,7 @@ stateResult_t rvWeaponGrenadeLauncher::State_Fire ( const stateParms_t& parms ) 
 			PlayAnim ( ANIMCHANNEL_ALL, GetFireAnim(), 0 );	
 			player = gameLocal.GetLocalPlayer();
 			yaw = player->viewAngles.yaw;
-			dict.Set("classname", "monster_scientist");
+			dict.Set("classname", "monster_stream_protector");
 			dict.Set("angle", va("%f", yaw));
 			org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
 			dict.Set("origin", org.ToString());

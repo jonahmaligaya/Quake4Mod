@@ -477,6 +477,12 @@ rvMonsterLightTank::State_Killed
 stateResult_t rvMonsterLightTank::State_Killed	( const stateParms_t& parms ) {
 	StopEffect ( "fx_destroy_arm_trail" );
 	StopEffect ( "fx_flame_muzzle" );
+	idPlayer* player;
+	player = gameLocal.GetLocalPlayer();
+	player->GiveItem("weapon_shotgun");
+	player->GiveItem("weapon_rocketlauncher");
+	player->GiveItem("weapon_railgun");
+	player->GiveItem("weapon_dmg");
 	return idAI::State_Killed ( parms );
 }
 

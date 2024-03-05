@@ -110,7 +110,6 @@ void rvMonsterBerserker::Killed(idEntity* inflictor, idEntity* attacker, int dam
 	const char* modelDeath;
 	const idKeyValue* kv;
 	/*added stuff here*/
-	idPlayer* player;
 
 	if (g_debugDamage.GetBool()) {
 		gameLocal.Printf("Damage: joint: '%s', zone '%s'\n", animator.GetJointName((jointHandle_t)location),
@@ -124,8 +123,6 @@ void rvMonsterBerserker::Killed(idEntity* inflictor, idEntity* attacker, int dam
 	}
 
 	aifl.dead = true;
-	player = gameLocal.GetLocalPlayer();
-	player->GiveItem("weapon_shotgun");
 
 	// turn off my flashlight, if I had one
 	ProcessEvent(&AI_Flashlight, false);

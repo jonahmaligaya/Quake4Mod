@@ -635,6 +635,13 @@ Fire the weapon
 ================
 */
 stateResult_t rvWeaponNailgun::State_Fire( const stateParms_t& parms ) {
+	const char* key, * value;
+	int			i;
+	float		yaw;
+	idVec3		org;
+	idPlayer* player;
+	idDict		dict;
+	idEntity* newEnt = NULL;
 	enum {
 		STAGE_INIT,
 		STAGE_FIRE,
@@ -669,9 +676,25 @@ stateResult_t rvWeaponNailgun::State_Fire( const stateParms_t& parms ) {
 			if ( wsfl.zoom ) {				
 				Attack ( true, 1, spread, 0.0f, 1.0f );
 				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
+				player = gameLocal.GetLocalPlayer();
+				yaw = player->viewAngles.yaw;
+				dict.Set("classname", "monster_sentry");
+				dict.Set("angle", va("%f", yaw));
+				org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+				dict.Set("origin", org.ToString());
+				gameLocal.SpawnEntityDef(dict, &newEnt);
+				player->fl.notarget = true;
 			} else {
 				Attack ( false, 1, spread, 0.0f, 1.0f );
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
+				player = gameLocal.GetLocalPlayer();
+				yaw = player->viewAngles.yaw;
+				dict.Set("classname", "monster_sentry");
+				dict.Set("angle", va("%f", yaw));
+				org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+				dict.Set("origin", org.ToString());
+				gameLocal.SpawnEntityDef(dict, &newEnt);
+				player->fl.notarget = true;
 			}
 			
 			// Play the exhaust effects

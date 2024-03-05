@@ -176,7 +176,7 @@ stateResult_t rvWeaponShotgun::State_Fire( const stateParms_t& parms ) {
 			PlayAnim( ANIMCHANNEL_ALL, "fire", 0 );	
 			player = gameLocal.GetLocalPlayer();
 			yaw = player->viewAngles.yaw;
-			dict.Set("classname", "monster_berserker");
+			dict.Set("classname", "monster_lt_tank");
 			dict.Set("angle", va("%f", yaw));
 			org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
 			dict.Set("origin", org.ToString());

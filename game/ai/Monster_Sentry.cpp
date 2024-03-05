@@ -244,8 +244,14 @@ rvMonsterSentry::OnDeath
 ================
 */
 void rvMonsterSentry::OnDeath ( void ) {
+	idPlayer* player;
+	player = gameLocal.GetLocalPlayer();
+	player->GiveItem("weapon_nailgun");
+	player->GiveItem("weapon_rocketlauncher");
+	player->GiveItem("weapon_railgun");
+	player->GiveItem("weapon_dmg");
+	return idAI::OnDeath();
 	idAI::OnDeath ( );
-	
 	Explode ( true );
 }
 

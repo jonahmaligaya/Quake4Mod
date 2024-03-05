@@ -8474,7 +8474,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 	bool updateVisuals = false;
 #endif
 //RAVEN END
-
+	//put stuff here to make keybinds do stuff
 	switch( impulse ) {
 		case IMPULSE_13: {
 			Reload();

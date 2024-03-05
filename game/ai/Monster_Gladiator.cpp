@@ -637,6 +637,12 @@ rvMonsterGladiator::State_Killed
 */
 stateResult_t rvMonsterGladiator::State_Killed ( const stateParms_t& parms ) {
 	HideShield ( );
+	idPlayer* player;
+	player = gameLocal.GetLocalPlayer();
+	player->GiveItem("weapon_machinegun");
+	player->GiveItem("weapon_rocketlauncher");
+	player->GiveItem("weapon_railgun");
+	player->GiveItem("weapon_dmg");
 	return idAI::State_Killed ( parms );
 }
 

@@ -220,6 +220,13 @@ rvWeaponMachinegun::State_Fire
 ================
 */
 stateResult_t rvWeaponMachinegun::State_Fire ( const stateParms_t& parms ) {
+	const char* key, * value;
+	int			i;
+	float		yaw;
+	idVec3		org;
+	idPlayer* player;
+	idDict		dict;
+	idEntity* newEnt = NULL;
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
@@ -228,11 +235,27 @@ stateResult_t rvWeaponMachinegun::State_Fire ( const stateParms_t& parms ) {
 		case STAGE_INIT:
 			if ( wsfl.zoom ) {
 				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( true, 1, spreadZoom, 0, 1.0f );
+				Attack ( true, 0, spreadZoom, 0, 0.0f );
+				player = gameLocal.GetLocalPlayer();
+				yaw = player->viewAngles.yaw;
+				dict.Set("classname", "monster_gladiator");
+				dict.Set("angle", va("%f", yaw));
+				org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+				dict.Set("origin", org.ToString());
+				gameLocal.SpawnEntityDef(dict, &newEnt);
+				player->fl.notarget = true;
 				fireHeld = true;
 			} else {
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( false, 1, spread, 0, 1.0f );
+				Attack ( false, 0, spread, 0, 0.0f );
+				player = gameLocal.GetLocalPlayer();
+				yaw = player->viewAngles.yaw;
+				dict.Set("classname", "monster_gladiator");
+				dict.Set("angle", va("%f", yaw));
+				org = player->GetPhysics()->GetOrigin() + idAngles(0, yaw, 0).ToForward() * 80 + idVec3(0, 0, 1);
+				dict.Set("origin", org.ToString());
+				gameLocal.SpawnEntityDef(dict, &newEnt);
+				player->fl.notarget = true;
 			}
 			PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );	
 			return SRESULT_STAGE ( STAGE_WAIT );

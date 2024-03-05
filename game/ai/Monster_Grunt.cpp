@@ -195,11 +195,7 @@ rvMonsterGrunt::OnDeath
 ================
 */
 void rvMonsterGrunt::OnDeath ( void ) {
-	idPlayer* player;
 	RageStop ( );
-	player = gameLocal.GetLocalPlayer();
-	player->GiveItem("weapon_dmg");
-	return idAI::OnDeath ( );
 }
 
 /*
